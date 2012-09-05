@@ -66,6 +66,12 @@
 	       <ul>{% for attached in m.node.attached[id.id] %}
 	           <li><a href="{% url node_detail id=attached.id %}">
 		   {{ m.rsc[attached.id].title }} {{ m.rsc[attached.id].node_sub_type_id.title}}</a></li>
+                      <ul>
+                      {% for sub_attached in m.node.attached[attached.id] %}
+	                 <li><a href="{% url node_detail id=sub_attached.id %}">
+		         {{ m.rsc[sub_attached.id].title }} {{ m.rsc[sub_attached.id].node_sub_type_id.title}}</a></li>
+                      {% endfor %}
+                      </ul>
 		   {% endfor %}
 	       </ul>
 	     <hr>
