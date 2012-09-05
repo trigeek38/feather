@@ -5,7 +5,7 @@ priv
 *.o
 *.beam
 *.plt
-/lib/downloads/
 *.bak
 files
 config
+*.plt
