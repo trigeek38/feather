@@ -1,0 +1,4 @@
+%% Dispatch rules for Lead Apron Application Help Module.
+[
+    {task_json,       ["task_json"],          resource_task_json,  []}
+].

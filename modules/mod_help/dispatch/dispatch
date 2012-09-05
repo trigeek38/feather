@@ -1,0 +1,6 @@
+%% Dispatch rules for Lead Apron Application Help Module.
+[
+    {faq,               ["faq"],                resource_template,            [{template, "faq.tpl"}]},
+    {howto,             ["howto"],              resource_template,            [{template, "howto.tpl"}]},
+    {howto_detail,      ["howto", id, slug],    resource_page,            [{template, "howto_detail.tpl"}]}
+].

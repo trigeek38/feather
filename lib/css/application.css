@@ -1,0 +1,22 @@
+body {
+   padding-top: 60px;
+   padding-bottom: 40px;
+}
+
+.sidebar-nav {
+   padding: 9px 0;
+}
+
+.value {
+   color: #333333;
+   font-weight: bold;
+}
+
+.hover {
+   background: #C1FFC1;
+}
+
+.admin-table{
+    min-height: 50px; 
+    margin: 0 -10px -10px -10px;
+}

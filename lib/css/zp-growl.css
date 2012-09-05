@@ -1,0 +1,95 @@
+/*  Growl notices stylesheet
+----------------------------------------------------------
+
+@package:	Zotonic 2009	
+@Author: 	Tim Benniks <tim@timbenniks.nl>
+
+Copyright 2009 Tim Benniks
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---------------------------------------------------------- */
+
+.notice-wrap {
+	position: fixed;
+	top: 40px;
+	right: 40px;
+	width: 360px;
+	z-index: 9999;
+}
+
+* html .notice-wrap {
+	position: absolute;		
+}
+ 
+.notice-item {
+	height: auto;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	padding: 6px 6px 0 6px;
+	display: block;
+	position: relative;
+	margin: 0 0 12px 0;
+	font-size: 14px;
+}
+
+.notice-item-close {
+	position: absolute;
+	font-family: Arial;
+	font-size: 16px;
+	font-weight: bold;
+	right: 10px;
+	top: 0;
+	cursor: pointer;
+}
+.error {
+        background: #FBE3E4;
+        color: #8A1F11;
+        border-top: 3px solid #FBC2C4;
+        border-top-width: 5px;
+        border-top-style: solid;
+        border-top-color: #FBC2C4;
+        border-bottom: 5px solid #FBC2C4;
+        border-bottom-width: 5px;
+        border-bottom-style: solid;
+        border-bottom-color: #FBC2C4;
+        border-right: 5px solid #FBC2C4;
+        border-right-width: 5px;
+        border-right-style: solid;
+        border-right-color: #FBC2C4;
+        border-left: 5px solid #FBC2C4;
+        border-left-width: 5px;
+        border-left-style: solid;
+        border-left-color: #FBC2C4;
+}
+
+.notice {
+        background: #FFF6BF;
+        color: #514721;
+        border-top: 1px solid #FFD324;
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-color: #FFD324;
+        border-bottom: 1px solid #FFD324;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #FFD324;
+        border-right: 1px solid #FFD324;
+        border-right-width: 1px;
+        border-right-style: solid;
+        border-right-color: #FFD324;
+        border-left: 1px solid #FFD324;
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-left-color: #FFD324;
+}

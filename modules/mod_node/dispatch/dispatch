@@ -1,0 +1,9 @@
+%% Dispatch rules for Lead Apron Application Help Module.
+[
+    {node_home,         ["inventory"],         resource_template,  [{template, "node_home.tpl"}]},
+    {node_list,         ["inventory", "list"], resource_template,  [{template, "node_list.tpl"}]},
+    {node_add,          ["inventory", "add"],  resource_template,  [{template, "node_add.tpl"}]},
+    {node_edit,         ["inventory", "edit", id], resource_page,  [{template, "node_edit.tpl"}]},
+    {node_detail,       ["inventory", id],     resource_page,      [{template, "node_detail.tpl"}]},
+    {node_search,       ["search"],            resource_template,  [{template, "node_detail.tpl"}]}
+].

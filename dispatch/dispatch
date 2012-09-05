@@ -1,0 +1,8 @@
+%% Put your dispatch rules here.
+
+[
+    {home,           [],                       resource_workorders,   	[ {template, "home.tpl"} ]},
+    {profile_detail, ["profile"],              resource_template,    	[ {template, "profile.tpl"} ]},
+    {calendar_home,  ["calendar"],	       resource_template,  	[ {template, "calendar.tpl"} ]}
+].
+

@@ -1,0 +1,8 @@
+%% Dispatch rules for Lead Apron Application Help Module.
+[
+    {issue_json,       ["issue_json"],          resource_issue_json,  []},
+    {issue_home,       ["issue"],               resource_template,    [{template, "issue_home.tpl"}]},
+    {issue_add,        ["issue", "add"],        resource_template,    [{template, "add_issue.tpl"}]},
+    {daily_check,      ["daily"],               resource_template,    [{template, "daily_check.tpl"}]},
+    {issue_detail,     ["issue", id],           resource_page,        [{template, "issue_detail.tpl"}]}
+].

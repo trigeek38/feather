@@ -1,0 +1,34 @@
+body{
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight:400;
+    color:#454545;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background:#f4f6f8 url(../img/body_img.jpg) repeat top left;
+    -webkit-font-smoothing: antialiased;
+    padding-top: 10px;
+    padding-bottom: 40px;
+}
+.sidebar-nav {
+    padding: 9px 0;
+}
+th.center {
+   text-align: center;
+   }
+td.center  {
+    text-align: center;
+    }
+
+td.right  {
+    text-align: right;
+    }
+
+header {
+    padding: 10px;
+    height: 55px;
+}
+.input-xmini {
+    width: 35px;
+}
