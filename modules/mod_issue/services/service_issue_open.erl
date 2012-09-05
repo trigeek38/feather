@@ -35,7 +35,7 @@ get_select_statement(Id, Context) ->
               "i.rsc_id as rsc_id",
 	      "initcap(r.pivot_title) as rsc_title",
 	      "initcap(a.pivot_title) as assigned_to",
-	      "left(i.issue_detail, 50) as issue_detail",
+	      "i.issue_detail as issue_detail",
 	      "i.request_date as start",
 	      "i.complete_date as end"
 	     ]," ,"),

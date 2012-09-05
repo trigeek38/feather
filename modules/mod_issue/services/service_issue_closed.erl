@@ -26,7 +26,7 @@ process_get(_ReqData, Context) ->
 
 get_select_statement(Context) ->
     IssueTypeId = m_rsc:name_to_id_check(issue_work_order, Context),
-    Select = "select i.id as id, i.rsc_id as rsc_id, initcap(r.pivot_title) as rsc_title, left(i.issue_detail, 50) as issue_detail, i.created as start",
+    Select = "select i.id as id, i.rsc_id as rsc_id, initcap(r.pivot_title) as rsc_title, i.issue_detail as issue_detail, i.created as start",
     From = "from issue i join rsc r on i.rsc_id = r.id",
     Where = "where i.is_complete = true and issue_type_id = " ++ z_convert:to_list(IssueTypeId) ++ ";",
     Statement = string:join([Select, From, Where], " "),
