@@ -225,7 +225,6 @@ insert(RscId, TaskDetail, Context) ->
                 {rsc_id, z_convert:to_integer(RscId)},
                 {is_visible, true},
                 {user_id, z_acl:user(Context)},
-                {assigned_id, z_acl:user(Context)},
                 {task_detail, TaskDetail1}
             ],
             case z_db:insert(task, Props, Context) of

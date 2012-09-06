@@ -29,12 +29,7 @@ event({sort, Sorted, {dragdrop, _, _, _}}, Context) ->
     TaskRanks = update_rank(TaskIds),
     [m_task:update_rank(Id,Rank,Context) || {Id, Rank} <- TaskRanks],
     mod_signal:emit({new_task,[]}, Context),
-    %Context1 = z_render:wire([
-           %       {update,[{target, "task_message"}, {text, "Updated Rank"}]},
-           %       {remove_class, [{target, "task_notice"}, {class, "hidden"}]}],
-    %           Context),
     Context;
-%    Context;
 
 
 event({submit, {add_task,[{id,RscId}]}, _TriggerId, _TargetId}, Context) ->
@@ -43,8 +38,6 @@ event({submit, {add_task,[{id,RscId}]}, _TriggerId, _TargetId}, Context) ->
         {ok, _TaskId} ->
             mod_signal:emit({new_task,[]}, Context),
             Context;
-%            z_render:wire(
-%                          {insert_top,[{target, "pending-task-list"}, {template, "_tasks_task.tpl"}, {task, m_task:get(TaskId,Context)}]}, Context);
         {error, Reason}  ->
             z_render:growl_error("Error !" ++ atom_to_list(Reason), Context)
         end.
@@ -82,10 +75,9 @@ install_task_table(false, Context) ->
             is_complete boolean not null default false,
             rsc_id int not null,
             user_id int,
-            assigned_id int,
+	    hours float default 0,
             rank int default 1,
-	    task_detail character varying(80) DEFAULT ''::character varying NOT NULL,
-            props bytea,
+	    task_detail character varying(240) DEFAULT ''::character varying NOT NULL,
             completed_date timestamp with time zone,
             created timestamp with time zone not null default now(),
             
@@ -95,16 +87,12 @@ install_task_table(false, Context) ->
                 on delete cascade on update cascade,
             constraint fk_task_user_id foreign key (user_id)
                 references rsc(id)
-                on delete set null on update cascade,
-            constraint fk_task_assigned_id foreign key (assigned_id)
-                references rsc(id)
                 on delete set null on update cascade
         )
     ", Context),
     Indices = [
         {"fki_task_rsc_id", "rsc_id"},
         {"fki_task_user_id", "user_id"},
-        {"fki_task_assigned_id", "assigned_id"},
         {"task_rsc_created_key", "rsc_id, created"},
         {"task_completed_date_key", "completed_date"},
         {"task_created_key", "created"}
