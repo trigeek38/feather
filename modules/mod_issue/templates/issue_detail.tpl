@@ -38,4 +38,9 @@
     </tbody>
     </table>
     <hr>
+    {% button action={emit signal={new_chat msg="hello"} name=chat} %}
+    <div id="tasks">{% include "_tasks_table.tpl" id=id %}</div>
+      {% wire action={connect signal={new_task} action={update target="tasks" template="_tasks_table.tpl" id=id}}  %}
+      {% wire action={connect signal={new_chat msg="hello"} action={dialog_open title="Chat" template="_chat.tpl" msg=m.signal[{new_task}].props}}  %}
+
 {% endblock %}
