@@ -1,0 +1,4 @@
+%% Dispatch for PDF Module.
+[
+	{pdf,		["pdf", '*'],		resource_file_readonly,    	[{root,[lib]},{use_cache, false}, {content_disposition, inline},{ssl, any}]}
+].

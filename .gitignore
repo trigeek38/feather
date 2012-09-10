@@ -8,4 +8,5 @@ priv
 *.bak
 files
 config
+/lib/downloads/
 *.plt

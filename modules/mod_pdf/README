@@ -1,0 +1,17 @@
+1. Activate the mod_pdf Module from Zotonic Admin.
+
+2. In the base template as the following line
+   {% all include "_application_head.tpl" %}
+
+3. Use the following postback to test the pdf conversion
+   {% button class="btn" postback={convert_to_pdf} delegate="mod_pdf" %}
+
+4. To make use of template use the following sample template and postback argument.
+   Template: 
+   {% extends "pdf_base.tpl" %}
+   {% block content %}
+     <p> Your HTML </p>
+   {% endblock %}
+   
+   Postback: 
+   {% button class="btn" postback={convert_to_pdf id=id template="your_template.tpl"} delegate="mod_pdf" %}
