@@ -31,6 +31,7 @@
     <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
 
 	{% all include "_html_head.tpl" %}
+	{% all include "_application_head.tpl" %}
 
 	{% lib "css/zp-menu.css" "css/jquery.loadmask.css" %}
 	{% lib "css/zp-dialog.css" 

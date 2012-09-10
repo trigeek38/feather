@@ -1,0 +1,11 @@
+1. Activate the mod_global_chat Module from Zotonic Admin.
+
+2. In the base template as the following line
+   {% all include "_application_head.tpl" %}
+
+3. Add the following line in the template where you want to show the chat button
+   {% include "_global_chat_button.tpl" %} 
+
+4. You will be now able to use the chat. 
+
+Note: Message are not saved if the page refreshed or the chat dialog is closed messages will be lost.
