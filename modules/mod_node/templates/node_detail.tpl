@@ -57,6 +57,10 @@
 	     <tr>
              <td>Location:</td><td>{{ id.room }}</td>
 	     </tr>
+	     <tr>
+             <td>Phone: <i id="id_phone"><i class="icon-user"></i></td><td><div id="phone_form">{{ id.phone }}</div></td>
+	     {% wire id="id_phone" action={update target="phone_form" template="_quick_edit_phone.tpl" id=id.id} %}
+	     </tr>
 	     </table>
           {% endwith %}
 	    </div>

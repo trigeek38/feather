@@ -11,6 +11,7 @@
     list_rsc/2,
     list_assigned/2,
     get/2,
+    update/3,
     insert/3,
     toggle_status/3,
     update_rank/3,
@@ -215,19 +216,16 @@ get(TaskId, Context) ->
 %% @doc Insert a new task. Fetches the submitter information from the Context.
 %% @spec insert(Id::int(), Name::string(), Email::string(), Message::string(), Context) -> {ok, CommentId} | {error, Reason}
 %% @todo Insert external ip address and user agent string
-insert(RscId, TaskDetail, Context) ->
+insert(RscId, Props, Context) ->
     case z_acl:rsc_visible(RscId, Context) 
         and (z_auth:is_auth(Context) 
             orelse z_convert:to_bool(m_config:get_value(mod_task, anonymous, true, Context))) of
         true ->
-            TaskDetail1 = z_html:escape_link(z_string:trim(TaskDetail)),
-            Props = [
+            Props1 = [
                 {rsc_id, z_convert:to_integer(RscId)},
-                {is_visible, true},
-                {user_id, z_acl:user(Context)},
-                {task_detail, TaskDetail1}
+                {is_visible, true}|Props
             ],
-            case z_db:insert(task, Props, Context) of
+            case z_db:insert(task, Props1, Context) of
                 {ok, TaskId} = Result ->
                     z_depcache:flush({task_rsc, RscId}, Context),
                     z_notifier:notify({task_insert, TaskId, RscId}, Context),
@@ -239,8 +237,14 @@ insert(RscId, TaskDetail, Context) ->
             {error, eacces}
     end.
 
+update(TaskId, Props, Context) ->
+    case z_db:update(task, TaskId, Props, Context) of
+        {ok, _} = Result -> Result;
+	{error, _} = Error -> Error
+    end.
+
 toggle_status(TaskId, Status, Context) ->
-            z_db:q("update task set is_complete=$2, completed_date = now() where id = $1", [TaskId, Status], Context),
+            z_db:q("update task set is_complete=$2 where id = $1", [TaskId, Status], Context),
             ok.
 
 update_rank(TaskId, Rank, Context) ->
