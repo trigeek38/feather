@@ -9,8 +9,12 @@
        {% if id.is_complete %} <div class="alert alert-info"><h4>{{ id.issue_solution }}</h4> <small>{{ id.complete_date|timesince }}</small></div>{% endif %}
     <div>
     {% button class="btn btn-primary" text="Edit Issue" action={dialog_open title="Edit Issue" template="edit_issue.tpl" id=id} %}
+    {% if not id.is_complete %}
+    {% button class="btn btn-primary" text="Mark Complete"  action={dialog_open title="Mark Complete" template="_issue_mark_complete.tpl" id=id} %}
+    {% endif %}
     </div>
     </div>
+    <div class="well">
     <table id="issue-table" class="table table-striped">
     <tbody>
     <tr>
@@ -24,23 +28,16 @@
     <tr>
     <td>Assigned To:</td><td> {{ id.assigned_id.title }}</td>
     </tr>
-    {% if not id.is_complete %}
-    <tr>
-    <td></td><td>{% button class="btn btn-primary" text="Mark Complete"  action={dialog_open title="Mark Complete" template="_issue_mark_complete.tpl" id=id} %}
-    </tr>
-    {% else %}
     <tr>
     <td>Complete Date:</td><td> {{ id.complete_date|date:"Y-m-d" }}
     {{ id.complete_date|date:"H:i" }}
     </td>
     </tr>
-    {% endif %}
     </tbody>
     </table>
+    </div>
     <hr>
-    {% button action={emit signal={new_chat msg="hello"} name=chat} %}
     <div id="tasks">{% include "_tasks_table.tpl" id=id %}</div>
       {% wire action={connect signal={new_task} action={update target="tasks" template="_tasks_table.tpl" id=id}}  %}
-      {% wire action={connect signal={new_chat msg="hello"} action={dialog_open title="Chat" template="_chat.tpl" msg=m.signal[{new_task}].props}}  %}
 
 {% endblock %}

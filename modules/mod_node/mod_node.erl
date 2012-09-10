@@ -93,7 +93,25 @@ event({submit, {quick_add_class, []}, _TriggerId, _TargetId}, Context) ->
 	      z_render:growl_error("Error ! duplicate name", Context);
 	  {ok, _Name} ->
               case m_rsc:insert(Props, Context) of
-              {ok, MfgId} ->
+              {ok, _RscId} ->
+                  z_render:growl("Added", Context);
+              {error, Reason}  ->
+                  z_render:growl_error("Error !" ++ atom_to_list(Reason), Context)
+              end
+	end;
+
+event({submit, {quick_add_category, []}, _TriggerId, _TargetId}, Context) ->
+        Name = z_context:get_q("category_name", Context),
+        Subject = z_convert:to_integer(z_context:get_q("node_type_id", Context)),
+        Cat = m_rsc:name_to_id_check(node_sub_type, Context),
+	Props = [{title, Name}, {category_id, Cat}, {is_published, true}],
+	case check_name(proplists:get_value(title, Props), Context) of
+	  {error, duplicate} ->
+	      z_render:growl_error("Error ! duplicate name", Context);
+	  {ok, _Name} ->
+              case m_rsc:insert(Props, Context) of
+              {ok, RscId} ->
+	          m_edge:insert(Subject, m_rsc:name_to_id_check(children, Context), RscId, Context), 
                   z_render:growl("Added", Context);
               {error, Reason}  ->
                   z_render:growl_error("Error !" ++ atom_to_list(Reason), Context)
@@ -109,7 +127,7 @@ event({submit, {quick_add_mfg, []}, _TriggerId, _TargetId}, Context) ->
 	      z_render:growl_error("Error ! duplicate name", Context);
 	  {ok, _Name} ->
               case m_rsc:insert(Props, Context) of
-              {ok, MfgId} ->
+              {ok, _MfgId} ->
                   z_render:growl("Added", Context);
               {error, Reason}  ->
                   z_render:growl_error("Error !" ++ atom_to_list(Reason), Context)
@@ -162,7 +180,14 @@ event({submit, {attach_node, [{id, Node}]}, _Trig, _Targ}, Context) ->
 	        z_render:growl_error("Error !" ++ atom_to_list(Reason), Context)
         end;
 
-
+event({submit, {edit_node_phone, [{id, Node}]}, _Trig, _Targ}, Context) ->
+        Phone = z_context:get_q("phone", Context),
+	case m_rsc:update(Node, [{phone, Phone}], Context) of
+            {ok, Node} ->
+		z_render:wire({reload,[]},Context);
+	    {error, Reason} ->
+	        z_render:growl_error("Error !" ++ atom_to_list(Reason), Context)
+        end;
 
 event({submit, {edit_node, [{id, Node}]}, _Trig, _Targ}, Context) ->
         Props = proc_form(Context),
@@ -228,7 +253,7 @@ proc_quick_form(Context) ->
             {summary, Description},
             {department_id, Department},
             {model, Model},
-            {room, Serial},
+            {serial, Serial},
             {room, Room},
             {node_type_id, list_to_integer(Type)},
             {node_sub_type_id, list_to_integer(SubType)},

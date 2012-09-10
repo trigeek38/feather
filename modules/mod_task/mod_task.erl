@@ -31,18 +31,49 @@ event({sort, Sorted, {dragdrop, _, _, _}}, Context) ->
     mod_signal:emit({new_task,[]}, Context),
     Context;
 
+event({submit, {edit_task,[{id,TaskId}]}, _TriggerId, _TargetId}, Context) ->
+        TaskDetail = z_context:get_q_validated("task_detail", Context),
+        CompleteDate = z_context:get_q("completed_date", Context, []),
+        CompleteTime = z_context:get_q("completed_time", Context, []),
+        CompletedDateTime = fn_date:get_date_time_tuple(CompleteDate, CompleteTime),
+        UserId = z_context:get_q("user_id", Context),
+        Hours = z_convert:to_float(z_context:get_q("hours", Context)),
+        Props = [
+                 {task_detail, TaskDetail},
+                 {completed_date, CompletedDateTime},
+                 {user_id, UserId},
+                 {hours, Hours}
+                ],
+
+        case m_task:update(TaskId, Props, Context) of
+        {ok, _} ->
+            mod_signal:emit({new_task,[]}, Context),
+            Context;
+        {error, Reason}  ->
+            z_render:growl_error("Error !" ++ atom_to_list(Reason), Context)
+        end;
 
 event({submit, {add_task,[{id,RscId}]}, _TriggerId, _TargetId}, Context) ->
         TaskDetail = z_context:get_q_validated("task_detail", Context),
-        case m_task:insert(RscId,TaskDetail, Context) of
+        TaskDetail = z_context:get_q_validated("task_detail", Context),
+        CompleteDate = z_context:get_q("completed_date", Context, []),
+        CompleteTime = z_context:get_q("completed_time", Context, []),
+        CompletedDateTime = fn_date:get_date_time_tuple(CompleteDate, CompleteTime),
+        UserId = z_context:get_q("user_id", Context),
+        Hours = z_convert:to_float(z_context:get_q("hours", Context)),
+        Props = [
+                 {task_detail, TaskDetail},
+                 {completed_date, CompletedDateTime},
+                 {user_id, UserId},
+                 {hours, Hours}
+                ],
+        case m_task:insert(RscId, Props, Context) of
         {ok, _TaskId} ->
             mod_signal:emit({new_task,[]}, Context),
             Context;
         {error, Reason}  ->
             z_render:growl_error("Error !" ++ atom_to_list(Reason), Context)
         end.
-
-
 
 %% @doc Return the list of recent tasks.  Returned values are the complete records.
 observe_search_query({search_query, {pending_tasks, []}, OffsetLimit}, Context) ->
@@ -97,7 +128,7 @@ install_task_table(false, Context) ->
         {"task_completed_date_key", "completed_date"},
         {"task_created_key", "created"}
     ],
-    [ z_db:q("create index "++Name++" on task ("++Cols++")", Context) || {Name, Cols} <- Indices ],
+    [ z_db:q("create index " ++ Name ++ " on task (" ++ Cols ++ ")", Context) || {Name, Cols} <- Indices ],
     ok.
 
 update_rank(L) ->
