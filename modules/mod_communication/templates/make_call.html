@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="zp-100" id="content">
+<h3>Use the form below to request a callback</h3>
+    <form action="/callme/make_call/" method="POST">
+        {% if form.called.errors %}
+        <div class="zp-100 notification error">{{ form.called.errors }}</div>
+        {% endif %}
+        <div class="zp-30">Enter your phone number:</div>
+        <div class="zp-30 form-item last"><input type="text" name="called" style="font-size: 1.5em;"></div>
+        <div class="zp-100"><input type="radio" name="destination" value="callback" checked> Call me!</div>
+        <div class="zp-100"><input type="radio" name="destination" value="conference"> Join Conference</div>
+        <div class="zp-100"><input type="radio" name="destination" value="record"> Leave a message</div>
+        <div class="zp-100"><input type="submit" value="Call me!"></div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

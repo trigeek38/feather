@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Dial>
+        <Number url="{{announce}}">
+            3522469644
+        </Number>
+    </Dial>
+</Response>
