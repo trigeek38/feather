@@ -1,19 +1,24 @@
 1. Activate the mod_communication Module from Zotonic Admin and restart zotonic to start the gen_server.
 
 2. To create conference call do the following.
-   PhoneList = ["3522192940", "3522469644"],
-   if you want custom invite message then call
-      m_communication:make_custom_template(Your_Message, Context) which will make a custom_invite.tpl in templates folder
-      Url = "custom_invite".
-   if you want default invite template 
-      Url = "inivite"
-   m_communication:create_call(PhoneList, Url, Context).
+  PhoneList = ["3522192940", "3522469644"],
+
+  if you want custom invite message then call
+     z_communication:make_custom_template(Your_Message, Context) which will make a custom_invite.tpl in templates folder
+     Url = "custom_invite".
+
+  if you want default invite template 
+     Url = "inivite"
+
+  z_communication:create_call(PhoneList, Url, Context).
 
 3. To send sms to List of Phone Numbers.
    PhoneList = ["3522192940", "3522469644"],
-   m_communication:send_sms(PhoneList, Message, Context).
+
+   z_communication:send_sms(PhoneList, Message, Context).
 
 4. To send Email to List of Email Ids.
    EmailList = ["sanketgawade7@gmail.com", "jeff@5nineshq.com"],
-   m_communication:send_email(EmailList, Template, Vars, Context).
+
+   z_communication:send_email(EmailList, Template, Vars, Context).
    

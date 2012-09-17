@@ -104,40 +104,40 @@ ensure_started(App) ->
     end.
 
 %% Create Calls
+create_call([], _Url) ->
+    ok;
+
 create_call([H|T], Url) ->
     From = "3525872956",
     Query = "From=+1"++From++"&To=+1"++H++"&Url="++Url++"&Method=GET",
     Msg = ?TwilPath++"/Calls/?",
     httpc:request(post, {Msg,[],"application/x-www-form-urlencoded",Query},[],[]),
-    create_call(T, Url);
-
-create_call([], _Url) ->
-    ok.
+    create_call(T, Url).
 
 %% Send SMS when we don't have to exclude owner
+send_sms(_Phone_List, []) ->
+    ok;
+
 send_sms(Phone_List, [Message|Rest]) ->
     send_sms1(Phone_List, edoc_lib:escape_uri(binary_to_list(z_html:unescape(Message)))),
-    send_sms(Phone_List, Rest);
-
-send_sms(_Phone_List, []) ->
-    ok.
+    send_sms(Phone_List, Rest).
     
+send_sms1([], _Message) ->
+    ok;
+
 send_sms1([H|T], Message) ->
     Msg = ?TwilPath++?SMSPath,
     Query = ?TwilNumber++H++?Body++Message,
     httpc:request(post, {Msg,[],"application/x-www-form-urlencoded",Query},[],[]),
-    send_sms1(T, Message);
-
-send_sms1([], _Message) ->
-    ok.
+    send_sms1(T, Message).
 
 %% Send Email
+send_email([], _Template, _Vars, _Context) ->
+    ok;
+
 send_email([Email|T], Template, Vars, Context) -> 
     z_email:send_render(Email, Template, Vars, Context),
-    send_email(T, Template, Vars, Context);
-
-send_email([], _Template, _Vars, _Context) ->
-    ok.
+    send_email(T, Template, Vars, Context).
 
 %%call_send_sms(Numbers, Message, UserId, Context) ->
 %%    Url = "?action=create&token="++ ?Token ++ "&msg=" ++ Message ++ "&numberToDial=",

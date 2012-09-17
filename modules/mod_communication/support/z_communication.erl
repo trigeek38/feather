@@ -17,7 +17,7 @@
 %% limitations under the License.
 %% =========================================================================%%
 
--module(m_communication).
+-module(z_communication).
 -author("Jeff Bell jeff@5nineshq.com").
 -author("Sanket Gawade sanket@5nineshq.com").
 
@@ -25,8 +25,7 @@
          create_call/3, 
          send_sms/3, 
          send_email/4, 
-         make_custom_template/2,
-         get_rsc_p/3
+         make_custom_template/2
        ]).
 
 -include_lib("zotonic.hrl").
@@ -82,20 +81,3 @@ make_custom_template(Message, Context) ->
 </Gather>
 </Response>",
     file:write_file(z_path:site_dir(Context) ++ "/modules/mod_communication/templates/custom_invite.tpl", Template).
-
-
-%% To get the resource property value
-%% get_rsc_p(integer, atom, Context) -> undefined | list
-get_rsc_p(Id, Property, Context) when is_integer(Id) ->
-    case m_rsc:p(Id, Property, Context) of
-    undefined ->
-        undefined;
-    {trans,[{en, Val}]} ->
-        binary_to_list(Val);
-    {trans,[{en,Val},{nl,_}]} ->
-        binary_to_list(Val);
-    Val when is_binary(Val) ->
-        binary_to_list(Val);
-    Val1 ->
-        Val1
-    end.
