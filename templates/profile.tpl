@@ -13,6 +13,8 @@
 
 <div class="page-header">
     <h1>{{ m.acl.user.id.title }}</h1>
+{% include "_global_chat_button.tpl" %}
+{% button class="btn" postback={convert_to_pdf} delegate="mod_pdf" %}
 </div>
 <form class="form-horizontal" id="profile-form" action="postback" method="POST">
   <div class="well">

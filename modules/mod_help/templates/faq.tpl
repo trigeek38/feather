@@ -3,16 +3,16 @@
 {% block content %}
 {% wire id="add-faq" action={update target="faq-div" template="_add_faq.tpl" } %}
 <div class="row">
-  <div class="span8">
+  <div class="span9">
     <div class="row">
-    <h2 class="span8">{{m.rsc.faq.id.title}}</h2>
+    <h2 class="span9">{{m.rsc.faq.id.title}}</h2>
       <a href="#" id="add-faq" class="pull-right"><i class="icon-plus"></i> Add FAQ</a>
       {% sorter id="faq-accordion" tag="faq" delegate="mod_help" %}
     </div>
     <hr>
   </div>
-  <div class="span8" id="faq-div"></div>
-  <div class="span8">
+  <div class="span9" id="faq-div"></div>
+  <div class="span9">
     <div class="accordion" id="faq-accordion">
     {% for faq in m.search[{search_faq}] %} 
       <div class="accordion-group"  id="sort-faq-{{faq.id}}">
@@ -30,7 +30,7 @@
         </div>
         <div id="collapse-{{faq.id}}" class="accordion-body collapse">
           <div class="accordion-inner">
-            {{faq.id.body}}
+            {{faq.id.body|show_media}}
           </div>
         </div>
       </div>
