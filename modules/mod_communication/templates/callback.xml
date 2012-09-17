@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say>I am connecting your call {{ destination }}</Say>
+    <Dial>
+        <Number url="http://portal.5nineshq.com/callme/announce/{{calling}}/">
+            {{ calling }}
+        </Number>
+    </Dial>
+</Response>
