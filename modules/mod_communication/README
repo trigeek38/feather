@@ -3,7 +3,7 @@
 2. To create conference call do the following.
    PhoneList = ["3522192940", "3522469644"],
    if you want custom invite message then call
-      m_communication:make_custom_template(Your_Message) which will make a custom_invite.tpl in templates folder
+      m_communication:make_custom_template(Your_Message, Context) which will make a custom_invite.tpl in templates folder
       Url = "custom_invite".
    if you want default invite template 
       Url = "inivite"

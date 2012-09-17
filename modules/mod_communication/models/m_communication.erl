@@ -25,7 +25,7 @@
          create_call/3, 
          send_sms/3, 
          send_email/4, 
-         make_custom_template/1,
+         make_custom_template/2,
          get_rsc_p/3
        ]).
 
@@ -71,8 +71,8 @@ divide_string(Message, List) ->
     end.
 
 %% @doc to make a custom invite template for the conference call.
-%% @spec make_custom_template(Message) -> ok
-make_custom_template(Message) ->
+%% @spec make_custom_template(Message, Context) -> ok
+make_custom_template(Message, Context) ->
     Template = "<?xml version='1.0' encoding='UTF-8'?> \n
 <Response> \n
 <Gather action='http://www.j2-c2.com/conf/' method='GET' numDigits='1'>\n
