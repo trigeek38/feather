@@ -1,5 +1,5 @@
 <div>
-  <strong class="span1">
+  <strong>
     {% ifequal m.acl.user  m.signal[signal].userid %}
       You :
     {% else %}

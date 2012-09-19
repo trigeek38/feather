@@ -1,0 +1,5 @@
+%% Dispatch rules for mod_communication.
+
+[
+    {globalchat,              ["global", "chat"],          resource_template,      [{template, '_global_chat.tpl'}]}
+].
