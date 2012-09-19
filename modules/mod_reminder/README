@@ -1,0 +1,28 @@
+1. Activate the Reminder module from Zotonic Admin Page.
+
+2. In the site config file add the following Line 
+   {server_time_zone, "EST"}
+   Set the Server Time Zome to the Time zone Server is at 
+   Eastern Time = "EST"  
+   Central Time = "CST"  
+   Mountain Time = "MST"  
+   Pacific Time = "PST"  
+
+3. Restart Zontonic after the above config is saved which will create a template "_time_zone_select.tpl" which you can include in the edit profile form for the user.
+   {% include "_time_zone_select.tpl" %}
+
+   Add the following to the edit_profile event for the form 
+   [Num, Zone] = string:tokens(z_context:get_q("time_zone", Context), ","), 
+    
+   Below line to person Props 
+   {time_zone, {Num, Zone}}  
+
+4. In the resource_reminder.erl you can add the getting PhoneList and EmailList logic for your Server. IF the mod_communication module is not activated it will not send   out sms messages but will send email message thorugh zotonic.
+ 
+5. You can include the following templates where you want to display the list of reminders for the particular resource.
+   {% include "_reminder_list.tpl" id=id  diff=m.acl.user.time_zone|element:1  %} 
+
+6. Include the following template where you need to place the Add Reminder button.
+   {% include "_add_reminder_button.tpl" id=id diff=m.acl.user.time_zone|element:1 %}
+
+7. To change the Reminder email content edit "_reminder_email.tpl" 

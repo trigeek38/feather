@@ -31,6 +31,7 @@
       <input type="text" id="phone" name="phone" placeholder="phone" value="{{user.phone}}">
     </div>
   </div>
+  {% include "_time_zone_select.tpl" %}
   </div>
   <div class="well">
   <h4>Calendar Defaults</h4>

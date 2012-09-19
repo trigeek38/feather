@@ -41,6 +41,7 @@ event({submit, {update_profile, [{id, User}]}, _Trig, _Targ}, Context) ->
         end.
 
 proc_form(Context) ->
+   [Num, Zone] = string:tokens(z_context:get_q(time_zone, Context), ","),
    Email = z_context:get_q(email, Context),
    Phone = z_context:get_q(phone, Context),
    CalendarView = z_context:get_q(calendar_view, Context),
@@ -48,12 +49,13 @@ proc_form(Context) ->
    ClosedWo = z_context:get_q(closed_wo, Context), 
    OpenProject = z_context:get_q(open_project, Context), 
    OpenPM = z_context:get_q(open_pm, Context), 
-   Props = [
+   [
        {email, Email},
        {phone, Phone},
        {calendar_view, CalendarView},
        {open_wo, OpenWo},
        {closed_wo, ClosedWo},
        {open_project, OpenProject},
-       {open_pm, OpenPM}
+       {open_pm, OpenPM},
+       {time_zone, {Num, Zone}}
    ].
