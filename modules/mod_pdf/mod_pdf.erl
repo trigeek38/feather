@@ -78,4 +78,3 @@ check_download_dir(SiteDir) ->
     _ ->
         ok
     end.
-        

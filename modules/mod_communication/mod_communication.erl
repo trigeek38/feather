@@ -36,7 +36,7 @@
 -include("mod_communication.hrl").
 -include_lib("zotonic.hrl").
 
--record(state, {context}).
+-record(state, {context, twilioNumber, twilioURL}).
 
 %%%================================================================
 %%% API
@@ -63,17 +63,25 @@ init(Args) ->
     ensure_started(public_key),
     ensure_started(ssl),
     ensure_started(inets),
-    {ok, #state{context=z_context:new(Context)}}.
+    TwilioNumber = m_site:get(twilioNumber, Context),
+    TwilioURL = m_site:get(twilioURL, Context),
+    {ok, #state{context=z_context:new(Context), twilioNumber=TwilioNumber, twilioURL=TwilioURL}}.
 
 handle_call(stop, _From, State) ->
     {stop, normal, stopped, State}.
 
 handle_cast({{create_call, Phone_List, Url}, _Context}, State) ->
-    create_call(Phone_List, ?URL ++ Url),
+    TwilioNumber = State#state.twilioNumber,
+    TwilioURL = State#state.twilioURL,
+    ?DEBUG(TwilioNumber),
+    ?DEBUG(TwilioURL),
+    create_call(Phone_List, TwilioNumber, TwilioURL ++ Url),
     {noreply, State};
 
 handle_cast({{send_sms, Phone_List, Message_List}, _Context}, State) ->
-    send_sms(Phone_List, Message_List),
+    TwilioNumber = State#state.twilioNumber,
+    ?DEBUG(TwilioNumber),
+    send_sms(Phone_List, TwilioNumber, Message_List),
     {noreply, State};
 
 handle_cast({{send_email, Email_List, Template, Vars}, Context}, State) ->
@@ -103,57 +111,37 @@ ensure_started(App) ->
             ok
     end.
 
-%% Create Calls
-create_call([], _Url) ->
+%% Create Conference Call for the List of Phone Numbers
+create_call([], _From, _Url) ->
     ok;
 
-create_call([H|T], Url) ->
-    From = "3525872956",
-    Query = "From=+1"++From++"&To=+1"++H++"&Url="++Url++"&Method=GET",
-    Msg = ?TwilPath++"/Calls/?",
-    httpc:request(post, {Msg,[],"application/x-www-form-urlencoded",Query},[],[]),
-    create_call(T, Url).
+create_call([H|T], From, Url) ->
+    Msg = ?TwilPath++?CallPath,
+    Query = ?QFrom++From++?QTo++H++?QUrl++Url++?QMethod++"GET",
+    httpc:request(post, {Msg,[],?TwilContentType,Query},[],[]),
+    create_call(T, From, Url).
 
-%% Send SMS when we don't have to exclude owner
-send_sms(_Phone_List, []) ->
+%% Send SMS to a List of Phone Numbers
+send_sms(_Phone_List, _From, []) ->
     ok;
 
-send_sms(Phone_List, [Message|Rest]) ->
-    send_sms1(Phone_List, edoc_lib:escape_uri(binary_to_list(z_html:unescape(Message)))),
-    send_sms(Phone_List, Rest).
+send_sms(Phone_List, From, [Message|Rest]) ->
+    send_sms1(Phone_List, From, edoc_lib:escape_uri(binary_to_list(z_html:unescape(Message)))),
+    send_sms(Phone_List, From, Rest).
     
-send_sms1([], _Message) ->
+send_sms1([], _From, _Message) ->
     ok;
 
-send_sms1([H|T], Message) ->
+send_sms1([H|T], From, Message) ->
     Msg = ?TwilPath++?SMSPath,
-    Query = ?TwilNumber++H++?Body++Message,
-    httpc:request(post, {Msg,[],"application/x-www-form-urlencoded",Query},[],[]),
-    send_sms1(T, Message).
+    Query = ?QFrom++From++?QTo++H++?QBody++Message,
+    httpc:request(post, {Msg,[],?TwilContentType,Query},[],[]),
+    send_sms1(T, From, Message).
 
-%% Send Email
+%% @ Send Email using the zotonic z_email
 send_email([], _Template, _Vars, _Context) ->
     ok;
 
 send_email([Email|T], Template, Vars, Context) -> 
     z_email:send_render(Email, Template, Vars, Context),
     send_email(T, Template, Vars, Context).
-
-%%call_send_sms(Numbers, Message, UserId, Context) ->
-%%    Url = "?action=create&token="++ ?Token ++ "&msg=" ++ Message ++ "&numberToDial=",
-%%    Url = "?action=create&token="++ ?Token ++ "&eventId=" ++ Event ++ "&userId=" ++ User ++ "&msg=" ++ Msg ++ "&numberToDial=",
-%%    send_sms(Numbers, Url, UserId, Context).
-%%    send_twil_sms(Numbers, Message, UserId, Context).
-
-%%send_sms([],_Url, _UserId, _Context) ->
-%%    ok;
-
-%%send_sms([H|T],Url, UserId, Context) ->
-%%    case binary_to_list(m_rsc:p(UserId, phone, Context)) of
-%%    H ->
-%%        send_sms(T, Url, UserId, Context);
-%%    _ ->
-%%        Msg = edoc_lib:escape_uri(Url++H),
-%%        httpc:request(?Path++Msg),
-%%        send_sms(T, Url, UserId, Context)
-%%    end.

@@ -1,5 +1,9 @@
 1. Activate the mod_communication Module from Zotonic Admin and restart zotonic to start the gen_server.
 
+2. Add the Twilio Number and URL to the site config file 
+   {twilioNumber, "0123456789"},
+   {twilioURL, "http://www.xxxxxx.com/"},
+
 2. To create conference call do the following.
   PhoneList = ["3522192940", "3522469644"],
 
