@@ -13,3 +13,4 @@
 -define (QBody, "&Body=").
 -define (QUrl, "&Url=").
 -define (QMethod, "&Method=").
+-define (INVITE_URL, "/invite?message=").

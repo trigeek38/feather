@@ -70,17 +70,14 @@ init(Args) ->
 handle_call(stop, _From, State) ->
     {stop, normal, stopped, State}.
 
-handle_cast({{create_call, Phone_List, Url}, _Context}, State) ->
+handle_cast({{create_call, Phone_List, Message}, _Context}, State) ->
     TwilioNumber = State#state.twilioNumber,
     TwilioURL = State#state.twilioURL,
-    ?DEBUG(TwilioNumber),
-    ?DEBUG(TwilioURL),
-    create_call(Phone_List, TwilioNumber, TwilioURL ++ Url),
+    create_call(Phone_List, TwilioNumber, TwilioURL ++ ?INVITE_URL ++ Message),
     {noreply, State};
 
 handle_cast({{send_sms, Phone_List, Message_List}, _Context}, State) ->
     TwilioNumber = State#state.twilioNumber,
-    ?DEBUG(TwilioNumber),
     send_sms(Phone_List, TwilioNumber, Message_List),
     {noreply, State};
 

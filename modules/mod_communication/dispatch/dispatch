@@ -1,9 +1,8 @@
 %% Dispatch rules for mod_communication.
 
 [
-    {sms,   	  	["sms"],    	   resource_communication,      [{template, 'sms.tpl'}]},
-    {invite,	  	["invite"], 	   resource_communication,      [{template, 'invite.tpl'}]},
-    {custom_invite,	["custom_invite"], resource_communication,      [{template, 'custom_invite.tpl'}]},
-    {conf,  	  	["conf"],    	   resource_communication,      [{template, 'conf.tpl'}]}
+    {sms,   	  	["sms"],    	  	resource_communication,      [{template, 'sms.tpl'}]},
+    {invite,	  	["invite"],		resource_communication,      [{template, 'invite.tpl'}]},
+    {conf,  	  	["conf"],    	   	resource_communication,      [{template, 'conf.tpl'}]}
 ].
 

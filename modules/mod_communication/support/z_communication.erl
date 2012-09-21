@@ -24,16 +24,19 @@
 -export([
          create_call/3, 
          send_sms/3, 
-         send_email/4, 
-         make_custom_template/2
+         send_email/4
        ]).
 
 -include_lib("zotonic.hrl").
+-define(CONF_MESSAGE, "You have been invited to a conference call by five nines").
 
 %% @doc To create a conference call for the List of Phone Numbers provided.
 %% @spec create_call(List, String, Context) -> ok
-create_call(Phone_List, Url, Context) ->
-    z_notifier:notify({create_call, Phone_List, Url}, Context).
+create_call(Phone_List, [], Context) ->
+    z_notifier:notify({create_call, Phone_List, create_query_message(?CONF_MESSAGE)}, Context);
+
+create_call(Phone_List, Message, Context) ->
+    z_notifier:notify({create_call, Phone_List, create_query_message(Message)}, Context).
 
 %% @doc To send SMS to a list of Phone Numbers provided.
 %% @spec sned_sms(List, String, Context) -> ok
@@ -69,15 +72,7 @@ divide_string(Message, List) ->
         divide_string([], List ++ [String])
     end.
 
-%% @doc to make a custom invite template for the conference call.
-%% @spec make_custom_template(Message, Context) -> ok
-make_custom_template(Message, Context) ->
-    Template = "<?xml version='1.0' encoding='UTF-8'?> \n
-<Response> \n
-<Gather action='http://www.j2-c2.com/conf/' method='GET' numDigits='1'>\n
-    <Say>" ++ Message ++ "</Say> \n
-    <Say>To join the group conference press 1</Say> \n
-    <Say>To ignore, press the star button</Say> \n
-</Gather>
-</Response>",
-    file:write_file(z_path:site_dir(Context) ++ "/modules/mod_communication/templates/custom_invite.tpl", Template).
+%% @doc To replace space with %2B(+) in the message 
+%% @spec create_query_message(List) -> List
+create_query_message(Message) ->
+    re:replace(string:strip(Message), " ", "%2B", [global, {return, list}]).

@@ -7,14 +7,11 @@
 2. To create conference call do the following.
   PhoneList = ["3522192940", "3522469644"],
 
+  if you want default invite message then call
+  z_communication:create_call(PhoneList, [], Context).
+  
   if you want custom invite message then call
-     z_communication:make_custom_template(Your_Message, Context) which will make a custom_invite.tpl in templates folder
-     Url = "custom_invite".
-
-  if you want default invite template 
-     Url = "inivite"
-
-  z_communication:create_call(PhoneList, Url, Context).
+  z_communication:create_call(PhoneList, Message, Context).
 
 3. To send sms to List of Phone Numbers.
    PhoneList = ["3522192940", "3522469644"],
