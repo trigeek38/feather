@@ -89,6 +89,8 @@ delete_reminder(RemId, Context) ->
         {error, Reason} 
     end.
 
+%% @doc To send the sms and email when time is up for particular reminder.
+%% @spec send_notification(Integer, List, List, Context) -> ok
 send_notification(RemId, PhoneList, EmailList, Context) ->
     Id = m_rsc:p(RemId, rscid, Context),
     Vars = [{id, Id}, {remid, RemId}],
@@ -99,9 +101,11 @@ send_notification(RemId, PhoneList, EmailList, Context) ->
         z_communication:send_sms(PhoneList, Message, Context),
         z_communication:send_email(EmailList, "_reminder_email.tpl", Vars, Context);
     false ->
-        send_email(EmailList, "_reminder_email.tpl", Vars, Context)
+        ?DEBUG("Error! mod_communication module not activated")
     end.
 
+%% @doc To create the template for time zone selection according to the server_time_zone listed in site config
+%% @spec config_server_time_zone(Context) -> ok
 config_server_time_zone(Context) ->
     case m_site:get(server_time_zone, Context) of
     undefined ->
@@ -117,6 +121,17 @@ config_server_time_zone(Context) ->
     _ ->
         ok
     end.
+
+%% @doc Search for Reminders
+search({search_reminders, Args}, _OfffsetLimit, _Context) ->
+    WhereString = get_query_string(Args),
+    #search_sql{
+        select="n.*",
+        from="pivot_mod_reminder n join rsc r on n.id = r.id",
+        where=WhereString,
+        order="r.pivot_title",
+        assoc=true
+    }.
 
 %% @doc To to process Reminder Form.
 %% @spec proc_form(DateTime, Context) -> Proplists
@@ -199,16 +214,6 @@ get_diff(Args) ->
         0
     end.
 
-search({search_reminders, Args}, _OfffsetLimit, _Context) ->
-    WhereString = get_query_string(Args),
-    #search_sql{
-        select="n.*",
-        from="pivot_mod_reminder n join rsc r on n.id = r.id",
-        where=WhereString,
-        order="r.pivot_title",
-        assoc=true
-    }.
-
 %% @doc To get the where string for the Database query depending on the arguments passed to search
 %% @spec get_query_string(PropsList) -> String
 get_query_string(Args) ->
@@ -227,6 +232,8 @@ get_query_string([{Key, Value}|T], WhereString) ->
         end,
     get_query_string(T, WhereString1).
 
+%% @doc To create the template for time zone selection according to the server_time_zone listed in site config
+%% @spec make_time_zone_template(Integer, Context) -> ok
 make_time_zone_template(N, Context) ->
     EST = z_convert:to_list(0 + N),
     CST = z_convert:to_list(-1 + N),
@@ -245,11 +252,3 @@ make_time_zone_template(N, Context) ->
       </div> 
     </div>",
     file:write_file(z_path:site_dir(Context) ++ "/modules/mod_reminder/templates/_time_zone_select.tpl", Template).
-
-%% Send Email
-send_email([], _Template, _Vars, _Context) ->
-    ok;
-
-send_email([Email|T], Template, Vars, Context) ->
-    z_email:send_render(Email, Template, Vars, Context),
-    send_email(T, Template, Vars, Context).

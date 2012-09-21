@@ -151,6 +151,7 @@ observe_search_query({search_query, {search_reminders, Args}, OffsetLimit}, Cont
 observe_search_query(_, _Context) ->
     undefined.
 
+%%Reset all the reminders when ther server is restarted.
 server_restart(Context) ->
      RemId_list = element(2, element(4, m_search:search({latest,[{cat, ["reminder"]}]}, Context))),
      reset_reminders(RemId_list, Context).

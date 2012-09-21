@@ -36,7 +36,7 @@ time_diff({Date, Time}, Diff, _Context) ->
     corrected_date_time({Date, Time}, list_to_integer(Diff)).
 
 %% @doc To estimate the time according to the Time Zone Difference.
-%% @spec corrected_date_time(DateTime, TimeZoneDiff) -> DateTime
+%% @spec corrected_date_time(DateTime::Tuple, TimeZoneDiff::int) -> DateTime::Tuple
 corrected_date_time({{Y, M, D}, {H, Min, S}}, Diff) ->
     NewHrs = H + Diff,
     case  NewHrs >= 0 andalso NewHrs < 24 of
