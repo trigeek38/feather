@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Say>Thanks for calling.  Remain on the line the review your message.</Say>
-    <Play>{{ vm_url }}</Play>
-    <Say>Goodbye.</Say>
-</Response>
