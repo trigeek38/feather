@@ -1,17 +1,11 @@
-{% wire action={connect signal={open_global_chat session=m.acl.user} 
-        action={script script="chatwin = window.open('global/chat', 'GlobalChat', 'height=500,width=300')"}} %}
-
-{% wire action={connect signal={check_chat_dialog} action={script script="
+{% wire action={connect signal={check_chat_win} action={script script="
                                                                            try {
                                                                              if (chatwin.closed) { 
-                                                                               $('#open-global-chat').trigger('click');
+                                                                               chatwin = window.open('/global/chat', 'GlobalChat', 'height=500,width=300');
                                                                              }
                                                                            }
                                                                            catch(err) {
-                                                                             $('#open-global-chat').trigger('click');
+                                                                             chatwin = window.open('/global/chat', 'GlobalChat', 'height=500,width=300');
                                                                            }"
                                                           }
                } %}
-
-{% wire id="open-global-chat" action={emit signal={open_global_chat session=m.acl.user}} %}
-<button style="display:none;" id="open-global-chat">Chat Room</button>
